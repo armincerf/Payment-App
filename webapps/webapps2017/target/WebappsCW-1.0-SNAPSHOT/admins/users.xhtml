@@ -1,0 +1,102 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <h:head>
+        <title>WebappsCW</title>
+        <link href="/WebappsCW/faces/style.css" rel="stylesheet" type="text/css" />
+        <link href="style.css" rel="stylesheet" type="text/css" />    </h:head>
+    <h:body>
+
+
+        <div id="page">
+            <div id="header-container">
+                <div id="header">
+                    <ul class="topnav">
+                        <li><h:link outcome="/users/index" value="Home"/></li>
+                        <li><h:link outcome="/users/viewNotifications" value="View Notifications"/></li>
+                        <li><h:link  outcome="/users/viewTransactions" value="View Transactions"/></li>
+                        <li><h:link outcome="/users/makeTransaction" value="Make a Transaction"/></li>
+                        <li><h:link outcome="/users/makeRequest" value="Request Money"/></li>
+                        <c:if test="#{request.isUserInRole('admins')}">
+                            <li><h:link class="active" value="Manage Users" outcome="users"/></li>
+                            <li><h:link  value="View all Transactions" outcome="transactions"/></li>
+
+                        </c:if>
+                        <li class="dropdown">
+                            #{request.remoteUser}'s account
+                            <div class="dropdown-content">
+                                <h:link value="View account balance" outcome="balance"/>
+                                <h:form>
+                                    <h:commandLink value="Logout" action="#{loginBean.logout()}"/>
+                                </h:form>
+                            </div>
+                        </li>
+
+
+
+                    </ul>
+                </div>
+            </div>
+            <div id="content">
+                <h:panelGrid id="users" columns="4" border="1" cellpadding="10" cellspacing="1">
+                    <f:facet name="header">
+                        <h:outputText value="Registered User list"/>
+                    </f:facet>
+                    <h:outputText value="Username"/>
+                    <h:outputText value="First Name"/>
+                    <h:outputText value="Last Name"/>
+                    <h:outputText value="Balance"/>
+                    <c:forEach var="users" items="#{registrationBean.getRegisteredUsers()}">
+                        <h:outputText value="#{users.username}"/>            
+                        <h:outputText value="#{users.name}"/>
+                        <h:outputText value="#{users.surname}"/>
+                        <h:outputText value="#{users.balance}"><f:convertNumber type="currency" currencySymbol="#{transactionBean.getCurrencySymbol(users.currency)}" /></h:outputText>                                 
+                    </c:forEach> 
+                </h:panelGrid>
+                 <h:form>
+            Register a new Admin User.
+            <br/>
+            <h:outputLabel for="username" value="*Username:"/>
+            <h:inputText id ="username" autocomplete="off" value="#{registrationBean.username}" title="Enter username" required="true" requiredMessage="Mandatory Field"/>
+            &nbsp; 
+            <h:message style="color:red" for="username"/>
+            <br/>
+            <h:outputLabel for="userPassword" value="*Password:"/>
+            <h:inputSecret id ="userPassword" autocomplete="off" value="#{registrationBean.userpassword}" size="20" title="Enter password" validatorMessage="Password must be between 4 and 20 characters" label="password" required="true" requiredMessage="Mandatory Field">
+                <f:validateRegex pattern="^.{4,20}$"/> 
+            </h:inputSecret>
+        
+            &nbsp; 
+            <h:message style="color:red" for="userPassword"/>
+            <br/>
+            <h:outputLabel for="name" value="*First Name: "/>
+            <h:inputText id ="name" autocomplete="off" value="#{registrationBean.name}" title="Enter name" required="true" label="name" requiredMessage="Mandatory Field"/>
+            &nbsp; 
+            <h:message style="color:red" for="name"/>
+            <br/>
+            <h:outputLabel for="surname" value="*Last Name"/>
+            <h:inputText id ="surname" autocomplete="off" value="#{registrationBean.surname}" title="Enter surname" label="surname" required="true"  requiredMessage="Mandatory Field"/>
+            &nbsp; 
+            <h:message style="color:red" for="surname"/>
+            <br/>
+            <h:outputLabel for="currency" value="*Currency"/>
+            <h:selectOneRadio value="#{registrationBean.currency}">
+                <f:selectItem itemValue="GBP" itemLabel="GBP"/>
+                <f:selectItem itemValue="USD" itemLabel="USD"/>
+                <f:selectItem itemValue="EUR" itemLabel="EUR"/>
+            </h:selectOneRadio>
+            &nbsp; 
+            <h:message style="color:red" for="surname"/>
+            <br/>
+            <h:commandButton id="register" type="submit" value="Register" action="#{registrationBean.registerAdmin()}" title="Register User"/>
+        </h:form>
+            </div>
+        </div>
+    </h:body>
+
+</html>
+

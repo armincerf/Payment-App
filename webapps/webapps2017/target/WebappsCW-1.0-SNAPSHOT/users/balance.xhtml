@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+<title>WebappsCW</title>
+        <link href="/WebappsCW/faces/style.css" rel="stylesheet" type="text/css" />
+        <link href="style.css" rel="stylesheet" type="text/css" />    </h:head>
+    <h:body>
+        <div id="page">
+            <div id="header-container">
+                <div id="header">
+                    <ul class="topnav">
+                        <li><h:link  outcome="/users/index" value="Home"/></li>
+                        <li><h:link outcome="/users/viewNotifications" value="View Notifications"/></li>
+                        <li><h:link outcome="/users/viewTransactions" value="View Transactions"/></li>
+                        <li><h:link outcome="/users/makeTransaction" value="Make a Transaction"/></li>
+                        <li><h:link outcome="/users/makeRequest" value="Request Money"/></li>
+                        <c:if test="#{request.isUserInRole('admins')}">
+                            <li><h:link value="Manage Users" outcome="users"/></li>
+                            <li><h:link  value="View all Transactions" outcome="transactions"/></li>
+
+                        </c:if>
+                        <li class="dropdown">
+                            #{request.remoteUser}'s account
+                            <div  class="dropdown-content">
+                                <h:link value="View account balance" outcome="balance"/>
+                                <h:form>
+                                    <h:commandLink value="Logout" action="#{loginBean.logout()}"/>
+                                </h:form>
+                            </div>
+                        </li>
+
+
+
+                    </ul>
+                </div>
+            </div>
+            <div id="content">
+                <h:outputLabel value="Hello #{request.remoteUser}! Your balance is: "/><h:outputText value="#{transactionBean.balance}"><f:convertNumber type="currency" currencySymbol="#{transactionBean.getUserCurrencySymbol()}" /></h:outputText>
+            </div>
+        </div>
+        
+
+    </h:body>
+</html>
+

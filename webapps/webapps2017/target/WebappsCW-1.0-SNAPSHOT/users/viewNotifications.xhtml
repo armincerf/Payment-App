@@ -1,0 +1,104 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>WebappsCW</title>
+        <link href="/WebappsCW/faces/style.css" rel="stylesheet" type="text/css" />
+        <link href="style.css" rel="stylesheet" type="text/css" />    </h:head>
+    <h:body>
+
+
+        <div id="page">
+            <div id="header-container">
+                <div id="header">
+                    <ul class="topnav">
+                        <li><h:link outcome="/users/index" value="Home"/></li>
+                        <li><h:link class="active" outcome="/users/viewNotifications" value="View Notifications"/></li>
+                        <li><h:link outcome="/users/viewTransactions" value="View Transactions"/></li>
+                        <li><h:link outcome="/users/makeTransaction" value="Make a Transaction"/></li>
+                        <li><h:link outcome="/users/makeRequest" value="Request Money"/></li>
+                        <c:if test="#{request.isUserInRole('admins')}">
+                            <li><h:link value="Manage Users" outcome="users"/></li>
+                            <li><h:link  value="View all Transactions" outcome="transactions"/></li>
+
+                        </c:if>
+                        <li class="dropdown">
+                            #{request.remoteUser}'s account
+                            <div class="dropdown-content">
+                                <h:link value="View account balance" outcome="balance"/>
+                                <h:form>
+                                    <h:commandLink value="Logout" action="#{loginBean.logout()}"/>
+                                </h:form>
+                            </div>
+                        </li>
+
+
+
+                    </ul>
+                </div>
+            </div>
+            <div id="content">
+                Hello #{request.remoteUser}! 
+                <br/>
+                <h:panelGrid id="recieved_notifications" columns="6" border="1" cellpadding="10" cellspacing="1">
+                    <f:facet name="header">
+                        <h:outputText value="Received notifications"/>
+                    </f:facet>
+                    <h:outputText value="Sender username"/>
+                    <h:outputText value="Sent Amount"/>
+                    <h:outputText value="Converted Amount"/>
+                    <h:outputText value="Date"/>
+                    <h:outputText value="Accept request"/>
+                    <h:outputText value="Decline request"/>
+                    <c:forEach var="notification" items="#{transactionBean.getReceivedNotifications()}">
+                        <h:outputText value="#{notification.sender.username}"/>            
+                        <h:outputText value="#{notification.amount}"><f:convertNumber type="currency" currencySymbol="#{transactionBean.getCurrencySymbol(notification.sender.currency)}" /></h:outputText>
+                        <h:outputText value="#{transactionBean.parseConvert(notification.sender.currency,notification.recipient.currency,notification.amount)}"><f:convertNumber type="currency" currencySymbol="#{transactionBean.getUserCurrencySymbol()}" /></h:outputText>
+                        <h:outputText value="#{notification.transactionDate}"><f:convertDateTime type="date" dateStyle="full" />
+                        </h:outputText>
+
+                        <c:if test="#{notification.rejected}">
+                            <h:outputText style="color: red;" value="Rejected"/>
+                            <h:outputText style="color: red;" value="Rejected"/>
+                        </c:if>
+                        <c:if test="#{notification.rejected==false}">
+                            <h:form>
+                                <h:commandButton action="#{transactionBean.makeTransaction(notification.sender.username,transactionBean.parseConvert(notification.sender.currency, notification.recipient.currency, notification.amount))}" value="Make Transaction"/>
+                            </h:form>
+                            <h:form>
+                                <h:commandButton action="#{transactionBean.declineNotification(notification.id)}" value="Decline"/>
+                            </h:form>
+                        </c:if>
+
+
+                    </c:forEach> 
+                </h:panelGrid>
+                <br/>
+                <h:panelGrid id="sent_notifications" columns="5" border="1" cellpadding="10" cellspacing="1">
+                    <f:facet name="header">
+                        <h:outputText value="Sent notifications"/>
+                    </f:facet>
+                    <h:outputText value="Recipient username"/>
+                    <h:outputText value="Amount"/>
+                    <h:outputText value="Date"/>
+                    <h:outputText value="Seen"/>
+                    <h:outputText value="Rejected"/>
+                    <c:forEach var="notification" items="#{transactionBean.getSentNotifications()}">
+                        <h:outputText value="#{notification.recipient.username}"/>            
+                        <h:outputText value="#{notification.amount}"><f:convertNumber type="currency" currencySymbol="#{transactionBean.getUserCurrencySymbol()}" /></h:outputText>  
+                        <h:outputText value="#{notification.transactionDate}"><f:convertDateTime type="date" dateStyle="full" />
+                        </h:outputText>
+                        <h:outputText value="#{notification.seen}"/>
+                        <h:outputText value="#{notification.rejected}"/>
+
+
+                    </c:forEach> 
+                </h:panelGrid>
+            </div>
+        </div>
+    </h:body>
+</html>
+

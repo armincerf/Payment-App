@@ -1,0 +1,15 @@
+com/ad436/webappsCW/jsf/LoginBean.class
+com/ad436/webappsCW/ejb/RSConversionApplication.class
+com/ad436/webappsCW/jsf/TransactionBean.class
+com/ad436/webappsCW/entity/SystemUserGroup.class
+org/netbeans/rest/application/config/ApplicationConfig.class
+com/ad436/webappsCW/ejb/RSConversion.class
+com/ad436/webappsCW/ejb/InitAdmin.class
+com/ad436/webappsCW/entity/Notification.class
+com/ad436/webappsCW/ejb/UserService.class
+com/ad436/webappsCW/ejb/TransactionService.class
+com/ad436/webappsCW/entity/SystemUserGroup_.class
+com/ad436/webappsCW/entity/SystemUser.class
+com/ad436/webappsCW/entity/SystemUser_.class
+com/ad436/webappsCW/entity/Notification_.class
+com/ad436/webappsCW/jsf/RegistrationBean.class

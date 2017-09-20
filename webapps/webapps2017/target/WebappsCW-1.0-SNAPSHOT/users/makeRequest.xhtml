@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+<title>WebappsCW</title>
+        <link href="/WebappsCW/faces/style.css" rel="stylesheet" type="text/css" />
+        <link href="style.css" rel="stylesheet" type="text/css" />    </h:head>
+    <h:body>
+
+
+        <div id="page">
+            <div id="header-container">
+                <div id="header">
+                    <ul class="topnav">
+                        <li><h:link  outcome="/users/index" value="Home"/></li>
+                        <li><h:link outcome="/users/viewNotifications" value="View Notifications"/></li>
+                        <li><h:link outcome="/users/viewTransactions" value="View Transactions"/></li>
+                        <li><h:link outcome="/users/makeTransaction" value="Make a Transaction"/></li>
+                        <li><h:link class="active" outcome="/users/makeRequest" value="Request Money"/></li>
+                        <c:if test="#{request.isUserInRole('admins')}">
+                            <li><h:link value="Manage Users" outcome="users"/></li>
+                            <li><h:link  value="View all Transactions" outcome="transactions"/></li>
+
+                        </c:if>
+                        <li class="dropdown">
+                            #{request.remoteUser}'s account
+                            <div class="dropdown-content">
+                                <h:link value="View account balance" outcome="balance"/>
+                                <h:form>
+                                    <h:commandLink value="Logout" action="#{loginBean.logout()}"/>
+                                </h:form>
+                            </div>
+                        </li>
+
+
+
+                    </ul>
+                </div>
+            </div>
+            <div id="content">
+                Hello #{request.remoteUser}!<br/>
+                <p>MAke a new transaction request</p>
+                <p>Please type the username and amount to request, they will see a notification</p>
+                <h:form>
+                    <h:outputLabel for="recipient" value="*User name:"/>
+                    <h:inputText id ="username" value="#{transactionBean.recipientUsername}" title="Enter user name of recivever" required="true" requiredMessage="Mandatory Field"/>
+                    &nbsp; 
+                    <h:message style="color:red" for="username"/>
+                    <h:outputLabel for="recipient" value="*Amount:"/>
+                    <h:inputText id ="amount" value="#{transactionBean.amount}" converter="javax.faces.BigDecimal" converterMessage="Please enter a valid number." title="Enter amount to request" required="true" requiredMessage="Mandatory Field">
+                        <f:convertNumber pattern="#0.00" />
+                    </h:inputText>
+                    <h:message style="color:red" for="amount"/>
+                    <br/>
+
+                    <h:commandButton id="register" type="submit" value="Submit" action="#{transactionBean.makeRequest}" title="Make Transaction request"/>
+                    <h:commandButton id="reset" type="reset" value="Reset Form" title="Reset Form"/>
+                </h:form> 
+            </div>
+        </div>
+    </h:body>
+</html>
+

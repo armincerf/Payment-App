@@ -1,0 +1,90 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>WebappsCW</title>
+        <link href="/webapps2017/faces/style.css" rel="stylesheet" type="text/css" />
+        <link href="style.css" rel="stylesheet" type="text/css" />    </h:head>
+    <h:body>
+
+
+        <div id="page">
+            <div id="header-container">
+                <div id="header">
+                    <ul class="topnav">
+                        <li><h:link outcome="/users/index" value="Home"/></li>
+                        <li><h:link outcome="/users/viewNotifications" value="View Notifications"/></li>
+                        <li><h:link class="active" outcome="/users/viewTransactions" value="View Transactions"/></li>
+                        <li><h:link outcome="/users/makeTransaction" value="Make a Transaction"/></li>
+                        <li><h:link outcome="/users/makeRequest" value="Request Money"/></li>
+                        <c:if test="#{request.isUserInRole('admins')}">
+                            <li><h:link value="Manage Users" outcome="users"/></li>
+                            <li><h:link  value="View all Transactions" outcome="transactions"/></li>
+
+                        </c:if>
+                        <li class="dropdown">
+                            #{request.remoteUser}'s account
+                            <div class="dropdown-content">
+                                <h:link value="View account balance" outcome="balance"/>
+                                <h:form>
+                                    <h:commandLink value="Logout" action="#{loginBean.logout()}"/>
+                                </h:form>
+                            </div>
+                        </li>
+
+
+
+                    </ul>
+                </div>
+            </div>
+            <div id="content">
+                Hello #{request.remoteUser}! 
+                <br/>
+                <h:panelGrid id="received_transactions" columns="5" border="1" cellpadding="10" cellspacing="1">
+                    <f:facet name="header">
+                        <h:outputText value="Received Transactions"/>
+                    </f:facet>
+                    <h:outputText value="Sender username"/>
+                    <h:outputText value="Sent Amount"/>
+                    <h:outputText value="Received (converted) Amount"/>
+                    <h:outputText value="Date"/>
+                    <h:outputText value="New Balance"/>
+
+                    <c:forEach var="transaction" items="#{transactionBean.getReceivedTransactions()}">
+                        <h:outputText value="#{transaction.sender.username}"/>  
+                        <h:outputText value="#{transaction.amount}"><f:convertNumber type="currency" currencySymbol="#{transactionBean.getCurrencySymbol(transaction.sender.currency)}" /></h:outputText>
+                        <h:outputText value="#{transactionBean.convert(transaction.sender.currency,transaction.recipient.currency,transaction.amount)}"><f:convertNumber type="currency" currencySymbol="#{transactionBean.getUserCurrencySymbol()}" /></h:outputText>
+                        <h:outputText value="#{transaction.transactionDate}"><f:convertDateTime type="date" dateStyle="full" />
+                        </h:outputText>
+                        <h:outputText value="#{transaction.receiverNewBalance}"><f:convertNumber type="currency" currencySymbol="#{transactionBean.getCurrencySymbol(transaction.recipient.currency)}" /></h:outputText>
+
+
+
+                    </c:forEach> 
+                </h:panelGrid>
+                <br/>
+                <h:panelGrid id="sent_transactions" columns="4" border="1" cellpadding="10" cellspacing="1">
+                    <f:facet name="header">
+                        <h:outputText value="Sent Transactions"/>
+                    </f:facet>
+                    <h:outputText value="Recipient username"/>
+                    <h:outputText value="Amount"/>
+                    <h:outputText value="Date"/>
+                    <h:outputText value="New Balance"/>
+                    <c:forEach var="transaction" items="#{transactionBean.getSentTransactions()}">
+                        <h:outputText value="#{transaction.recipient.username}"/>  
+                        <h:outputText value="#{transaction.amount}"><f:convertNumber type="currency" currencySymbol="#{transactionBean.getUserCurrencySymbol()}" /></h:outputText>
+                        <h:outputText value="#{transaction.transactionDate}"><f:convertDateTime type="date" dateStyle="full" />
+                        </h:outputText>    
+                        <h:outputText value="#{transaction.senderNewBalance}"><f:convertNumber type="currency" currencySymbol="#{transactionBean.getUserCurrencySymbol()}" /></h:outputText>                       
+                    </c:forEach> 
+
+                </h:panelGrid>
+            </div>
+        </div>
+    </h:body>
+</html>
+

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Scene Scope="Faces Configuration Only" version="2">
+    <Scope Scope="Faces Configuration Only"/>
+    <Scope Scope="Project">
+        <Node id="error.xhtml" x="400" y="150" zoom="true"/>
+        <Node id="transactionSuccess.xhtml" x="400" y="450" zoom="true"/>
+        <Node id="index.xhtml" x="900" y="150" zoom="true"/>
+        <Node id="users/balance.xhtml" x="650" y="450" zoom="true"/>
+        <Node id="users/viewTransactions.xhtml" x="400" y="300" zoom="true"/>
+        <Node id="registration.xhtml" x="150" y="150" zoom="true"/>
+        <Node id="admins/users.xhtml" x="650" y="150" zoom="true"/>
+        <Node id="users/makeRequest.xhtml" x="150" y="600" zoom="true"/>
+        <Node id="login.xhtml" x="150" y="450" zoom="true"/>
+        <Node id="users/user.xhtml" x="150" y="300" zoom="true"/>
+        <Node id="users/makeTransaction.xhtml" x="400" y="600" zoom="true"/>
+        <Node id="users/index.xhtml" x="650" y="300" zoom="true"/>
+        <Node id="users/viewNotifications.xhtml" x="900" y="300" zoom="true"/>
+        <Node id="transactionNoFunds.xhtml" x="1150" y="150" zoom="true"/>
+    </Scope>
+    <Scope Scope="All Faces Configurations"/>
+</Scene>
